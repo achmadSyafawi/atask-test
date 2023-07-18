@@ -1,12 +1,3 @@
-// interface IUsername {
-//   //   loading: boolean;
-//   //   error: string | boolean;
-//   //   data:
-//   postSearchLoading: boolean;
-//   postSearchData: any;
-//   postSearchError: string | boolean;
-// }
-
 interface IUsername {
   loading: boolean;
   error: string | boolean;

@@ -30,31 +30,26 @@ export const postSearch = ({ searchValue }: ActionParams) => {
         if (responseData) {
           responseData.forEach((element: any) => {
             let links: IRepo[] = [];
-            links.push({
-              name: "dummy",
-              description: "dummy exceed request limit",
-              stargazers_count: 1,
-            });
-            // axios({ method: "GET", url: element.repos_url })
-            //   .then((repoResponse: any) => {
-            //     repoResponse.data.forEach((repo: IRepo) => {
-            //       links.push({
-            //         name: repo.name,
-            //         description: repo.description,
-            //         stargazers_count: repo.stargazers_count,
-            //       });
-            //     });
-            //   })
-            //   .catch((err) => {
-            //     dispatch({
-            //       type: POST_SEARCH,
-            //       response: {
-            //         loading: false,
-            //         data: false,
-            //         error: err.message,
-            //       },
-            //     });
-            //   });
+            axios({ method: "GET", url: element.repos_url })
+              .then((repoResponse: any) => {
+                repoResponse.data.forEach((repo: IRepo) => {
+                  links.push({
+                    name: repo.name,
+                    description: repo.description,
+                    stargazers_count: repo.stargazers_count,
+                  });
+                });
+              })
+              .catch((err) => {
+                dispatch({
+                  type: POST_SEARCH,
+                  response: {
+                    loading: false,
+                    data: false,
+                    error: err.message,
+                  },
+                });
+              });
             mutateResponse.push({
               login: element.login,
               links: links,
@@ -67,7 +62,7 @@ export const postSearch = ({ searchValue }: ActionParams) => {
           response: {
             loading: false,
             data: mutateResponse,
-            error: false,
+            error: mutateResponse.length <= 0 ? "No Data" : false,
           },
         });
       })

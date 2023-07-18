@@ -11,11 +11,13 @@ import {
   rem,
   Card,
   Skeleton,
+  Alert,
 } from "@mantine/core";
 import {
   IconChevronDown,
   IconChevronUp,
   IconStarFilled,
+  IconAlertCircleFilled,
 } from "@tabler/icons-react";
 import { useSelector } from "react-redux";
 import { IRepo } from "../redux/type.d";
@@ -108,8 +110,6 @@ export function LinksGroup({
     </Card>
   ));
 
-  console.log("label", label);
-
   return (
     <>
       <Skeleton visible={loading} mb={5}>
@@ -117,7 +117,7 @@ export function LinksGroup({
           onClick={() => setOpened((o) => !o)}
           className={classes.control}
           bg={"#d6d7d86b"}
-          mb={5}
+          my={5}
         >
           <Group position="apart" spacing={0}>
             <Box sx={{ display: "flex", alignItems: "center" }}>
@@ -147,7 +147,7 @@ export function LinksGroup({
 
 const DropdownNav = () => {
   const [dataUser, setDataUser] = useState([]);
-  //   const [showError, setShowError] = useState(false);
+  const [showError, setShowError] = useState(false);
   const { postSearchLoading, postSearchData, postSearchError } = useSelector(
     (state: any) => state.searchReducer
   );
@@ -161,9 +161,15 @@ const DropdownNav = () => {
       });
       setDataUser(mutateData);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [postSearchLoading]);
-  console.log("data redux", postSearchData);
-  console.log("data error", postSearchError === false);
+  useEffect(() => {
+    if (!postSearchLoading && postSearchError !== false) {
+      setShowError(true);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [postSearchError]);
+
   return (
     <Box
       sx={(theme) => ({
@@ -171,9 +177,25 @@ const DropdownNav = () => {
         padding: 0,
       })}
     >
-      {dataUser.map((item: LinksGroupProps, idx: number) => {
-        return <LinksGroup key={idx} {...item} loading={postSearchLoading} />;
-      })}
+      {postSearchError === false ? (
+        dataUser.map((item: LinksGroupProps, idx: number) => {
+          return <LinksGroup key={idx} {...item} loading={postSearchLoading} />;
+        })
+      ) : showError ? (
+        <Alert
+          my={5}
+          withCloseButton
+          icon={<IconAlertCircleFilled size="md" />}
+          title={postSearchError}
+          color="red"
+          variant="light"
+          onClose={() => {
+            setShowError(false);
+          }}
+        >
+          <></>
+        </Alert>
+      ) : null}
     </Box>
   );
 };
