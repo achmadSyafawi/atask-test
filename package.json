@@ -1,5 +1,6 @@
 {
   "name": "atask-test",
+  "homepage": "https://achmadSyafawi.github.io/atask-test",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -25,6 +26,8 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
@@ -51,6 +54,7 @@
   "devDependencies": {
     "@types/react-redux": "^7.1.25",
     "@types/redux": "^3.6.0",
-    "@types/redux-thunk": "^2.1.0"
+    "@types/redux-thunk": "^2.1.0",
+    "gh-pages": "^5.0.0"
   }
 }
